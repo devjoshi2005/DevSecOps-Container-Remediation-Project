@@ -1,0 +1,1568 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cloud Security Project: DevSecOps Container Remediation &amp; </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'navy': '#0a2540',
+                        'slate-blue': '#4f46e5',
+                        'deep-navy': '#0d1117',
+                        'cyber-blue': '#00d4ff',
+                        'silver': '#c0c0c0'
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        /* Mermaid chart container styles */
+        .mermaid-container {
+            display: flex;
+            justify-content: center;
+            min-height: 300px;
+            max-height: 800px;
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mermaid-container .mermaid {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none; 
+            -webkit-user-select: none; 
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .mermaid-container .mermaid svg {
+            max-width: 100%;
+            height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .mermaid-container .mermaid:active {
+            cursor: grabbing;
+        }
+
+        .mermaid-container.zoomed .mermaid {
+            height: 100%;
+            width: 100%;
+            cursor: grab;
+        }
+
+        .mermaid-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mermaid-control-btn {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #374151;
+            font-size: 14px;
+            min-width: 36px;
+            height: 36px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mermaid-control-btn:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        .mermaid-control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .mermaid-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #f3f4f6;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .mermaid {
+            font-family: 'Inter', sans-serif !important;
+            background: transparent !important;
+        }
+        
+        .mermaid .node rect,
+        .mermaid .node circle,
+        .mermaid .node ellipse,
+        .mermaid .node polygon {
+            fill: #ffffff !important;
+            stroke: #4f46e5 !important;
+            stroke-width: 2px !important;
+            filter: drop-shadow(0 2px 4px rgba(79, 70, 229, 0.15)) !important;
+        }
+        
+        .mermaid .node.primary rect,
+        .mermaid .node.primary circle,
+        .mermaid .node.primary ellipse,
+        .mermaid .node.primary polygon {
+            fill: #4f46e5 !important;
+            stroke: #3730a3 !important;
+        }
+        
+        .mermaid .node.primary .label,
+        .mermaid .node.primary .nodeLabel {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+        }
+        
+        .mermaid .node.secondary rect,
+        .mermaid .node.secondary circle,
+        .mermaid .node.secondary ellipse,
+        .mermaid .node.secondary polygon {
+            fill: #00d4ff !important;
+            stroke: #0891b2 !important;
+        }
+        
+        .mermaid .node.secondary .label,
+        .mermaid .node.secondary .nodeLabel {
+            color: #0a2540 !important;
+            fill: #0a2540 !important;
+        }
+        
+        .mermaid .node.tertiary rect,
+        .mermaid .node.tertiary circle,
+        .mermaid .node.tertiary ellipse,
+        .mermaid .node.tertiary polygon {
+            fill: #0a2540 !important;
+            stroke: #0d1117 !important;
+        }
+        
+        .mermaid .node.tertiary .label,
+        .mermaid .node.tertiary .nodeLabel {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+        }
+        
+        .mermaid .node.accent rect,
+        .mermaid .node.accent circle,
+        .mermaid .node.accent ellipse,
+        .mermaid .node.accent polygon {
+            fill: #c0c0c0 !important;
+            stroke: #9ca3af !important;
+        }
+        
+        .mermaid .node.accent .label,
+        .mermaid .node.accent .nodeLabel {
+            color: #0a2540 !important;
+            fill: #0a2540 !important;
+        }
+        
+        .mermaid .node .label,
+        .mermaid .nodeLabel {
+            color: #0a2540 !important;
+            fill: #0a2540 !important;
+            font-weight: 500 !important;
+            font-size: 13px !important;
+            font-family: 'Inter', sans-serif !important;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .mermaid .edgePath .path {
+            stroke: #4f46e5 !important;
+            stroke-width: 2px !important;
+            filter: drop-shadow(0 1px 2px rgba(79, 70, 229, 0.2)) !important;
+        }
+        
+        .mermaid .edgeLabel {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            color: #0a2540 !important;
+            fill: #0a2540 !important;
+            font-weight: 500 !important;
+            font-size: 12px !important;
+            font-family: 'Inter', sans-serif !important;
+            padding: 4px 8px !important;
+            border-radius: 4px !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        .mermaid .arrowheadPath {
+            fill: #4f46e5 !important;
+            stroke: #4f46e5 !important;
+        }
+
+        @media (max-width: 1024px) {
+            .mermaid-control-btn:not(.reset-zoom) {
+                display: none;
+            }
+            .mermaid-controls {
+                top: auto;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+  </head>
+
+  <body class="bg-gray-50 font-sans">
+    <button id="toc-toggle" class="fixed top-4 left-4 z-50 p-2 bg-white rounded shadow md:hidden">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <nav id="toc" class="fixed left-0 top-0 h-full w-80 bg-white shadow-xl z-40 overflow-y-auto border-r border-gray-200 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-lg font-bold text-navy">Table of Contents</h3>
+          <button id="toc-close" class="p-1 text-gray-500 md:hidden">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <ul class="space-y-3 text-sm">
+          <li>
+            <a href="#hero" class="block text-gray-700 hover:text-slate-blue transition-colors py-1">Executive Summary</a>
+          </li>
+          <li>
+            <a href="#architecture" class="block text-gray-700 hover:text-slate-blue transition-colors py-1">Architecture Design</a>
+          </li>
+          <li>
+            <a href="#compliance" class="block text-gray-700 hover:text-slate-blue transition-colors py-1">PCI DSS Compliance</a>
+          </li>
+          <li>
+            <a href="#implementation" class="block text-gray-700 hover:text-slate-blue transition-colors py-1">Implementation Plan</a>
+          </li>
+          <li>
+            <a href="#tooling" class="block text-gray-700 hover:text-slate-blue transition-colors py-1">Tool Configuration</a>
+          </li>
+          <li>
+            <a href="#analysis" class="block text-gray-700 hover:text-slate-blue transition-colors py-1">Threat Analysis</a>
+          </li>
+          <li>
+            <a href="#results" class="block text-gray-700 hover:text-slate-blue transition-colors py-1">Results &amp; Validation</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="ml-0 md:ml-80 min-h-screen">
+      <!-- Hero Section -->
+      <section id="hero" class="relative bg-gradient-to-br from-deep-navy via-navy to-slate-900 text-white overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+          <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/ce0d48393787510ff78f904e2273327bd4a2c210.jpg" alt="Abstract glowing data center network with security shield" class="w-full h-full object-cover" size="wallpaper" aspect="wide" color="blue" style="photo" query="data center security shield" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-8 py-16">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif italic leading-tight mb-6">
+                <span class="block">Interactive Blueprint</span>
+                <span class="block text-cyber-blue font-semibold">DevSecOps Container Remediation Pipeline with AWS Inspector</span>
+              </h1>
+              <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                A comprehensive guide to building a finance-grade security architecture with DDoS mitigation and threat analysis capabilities on Google Cloud Platform.
+              </p>
+              <div class="flex flex-wrap gap-4">
+                <span class="px-4 py-2 bg-slate-blue/20 rounded-full text-sm border border-slate-blue">PCI DSS Compliant</span>
+                <span class="px-4 py-2 bg-cyber-blue/20 rounded-full text-sm border border-cyber-blue">Serverless Architecture</span>
+                <span class="px-4 py-2 bg-silver/20 rounded-full text-sm border border-silver">8-10 Hour Implementation</span>
+              </div>
+            </div>
+
+            <!-- Bento Grid Layout -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <i class="fas fa-shield-alt text-3xl text-cyber-blue mb-4"></i>
+                <h3 class="font-semibold mb-2">Multi-Layer Defense</h3>
+                <p class="text-sm text-gray-300">Cloudflare + Cloud Armor protection</p>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <i class="fas fa-search text-3xl text-cyber-blue mb-4"></i>
+                <h3 class="font-semibold mb-2">Threat Intelligence</h3>
+                <p class="text-sm text-gray-300">Palo Alto WildFire integration</p>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <i class="fas fa-server text-3xl text-cyber-blue mb-4"></i>
+                <h3 class="font-semibold mb-2">Serverless Core</h3>
+                <p class="text-sm text-gray-300">Python Cloud Functions</p>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <i class="fas fa-chart-line text-3xl text-cyber-blue mb-4"></i>
+                <h3 class="font-semibold mb-2">SIEM Analytics</h3>
+                <p class="text-sm text-gray-300">Splunk for compliance</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Executive Summary -->
+      <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="mb-12">
+            <h2 class="text-4xl font-serif font-bold text-navy mb-6">Executive Summary</h2>
+            <div class="w-24 h-1 bg-slate-blue mb-8"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+              <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                This project outlines a comprehensive plan for a sample cloud security project designed to protect a finance-related application from Distributed Denial-of-Service (DDoS) attacks and facilitate advanced threat analysis. The architecture leverages a hybrid approach, combining the robust, scalable infrastructure of GCP with specialized security services from industry-leading providers.
+              </p>
+
+              <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                <h3 class="text-xl font-semibold text-navy mb-4">Key Objectives</h3>
+                <ul class="space-y-3">
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-slate-blue mt-1 mr-3"></i>
+                    <span>Implement multi-layered DDoS mitigation using Cloudflare and GCP Cloud Armor</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-slate-blue mt-1 mr-3"></i>
+                    <span>Integrate advanced threat analysis with Palo Alto WildFire</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-slate-blue mt-1 mr-3"></i>
+                    <span>Ensure PCI DSS compliance for payment processing</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-slate-blue mt-1 mr-3"></i>
+                    <span>Establish comprehensive logging with Splunk SIEM</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="bg-gradient-to-br from-slate-blue to-navy rounded-xl p-6 text-white mb-6">
+                <h3 class="text-xl font-semibold mb-4">Timeline</h3>
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center">
+                    <span>Phase 1: Infrastructure</span>
+                    <span class="text-cyber-blue">3 hours</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span>Phase 2: Development</span>
+                    <span class="text-cyber-blue">3 hours</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span>Phase 3: Security Testing</span>
+                    <span class="text-cyber-blue">3 hours</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span>Phase 4: Finalization</span>
+                    <span class="text-cyber-blue">1 hour</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Architecture Section -->
+      <section id="architecture" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-8">
+          <div class="mb-12">
+            <h2 class="text-4xl font-serif font-bold text-navy mb-6">Architecture Design</h2>
+            <div class="w-24 h-1 bg-slate-blue mb-8"></div>
+            <p class="text-lg text-gray-700 max-w-3xl">
+              The architecture employs a defense-in-depth strategy with multiple security layers, from edge protection to application-level controls.
+            </p>
+          </div>
+
+          <!-- Architecture Diagram -->
+          <div class="bg-white rounded-xl p-8 shadow-lg mb-12">
+            <h3 class="text-2xl font-semibold text-navy mb-6">High-Level Architecture Flow</h3>
+            <div class="mermaid-title">Cloud Security Architecture Flow</div>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid" id="architecture-diagram">
+                graph TD
+                A[&#34;BreakingPoint Traffic Simulation&#34;] --&gt; B[&#34;Cloudflare Edge WAF &amp; DDoS&#34;]
+                B --&gt; C[&#34;GCP Global HTTPS Load Balancer&#34;]
+                C --&gt; D[&#34;GCP Cloud Armor WAF&#34;]
+                D --&gt; E[&#34;GCP API Gateway&#34;]
+                E --&gt; F[&#34;Python Cloud Function Payment Gateway&#34;]
+                F --&gt; G[&#34;GCP Cloud Tasks Async Processing&#34;]
+
+                D --&gt; H[&#34;Threat Analysis&#34;]
+                E --&gt; I[&#34;Google Cloud Logging&#34;]
+                F --&gt; I
+                G --&gt; I
+                I --&gt; J[&#34;Splunk SIEM &amp; Compliance&#34;]
+
+                H --&gt; K[&#34;Palo Alto WildFire&#34;]
+                J --&gt; L[&#34;AI Chatbot Automation&#34;]
+
+                classDef primary fill:#4f46e5,stroke:#3730a3,stroke-width:2px,color:#fff
+                classDef secondary fill:#00d4ff,stroke:#0891b2,stroke-width:2px,color:#0a2540
+                classDef tertiary fill:#0a2540,stroke:#0d1117,stroke-width:2px,color:#fff
+                classDef accent fill:#c0c0c0,stroke:#9ca3af,stroke-width:2px,color:#0a2540
+
+                class A,B primary
+                class C,D,E secondary
+                class F,G tertiary
+                class H,I,J,K,L accent
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Perimeter Security -->
+            <div class="bg-white rounded-xl p-8 shadow-lg">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-shield-alt text-3xl text-slate-blue mr-4"></i>
+                <h3 class="text-2xl font-semibold text-navy">Perimeter Security Layer</h3>
+              </div>
+              <div class="space-y-4">
+                <div class="border-l-4 border-slate-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Cloudflare Protection</h4>
+                  <p class="text-gray-600 text-sm">Global anycast network with 100+ Tbps DDoS capacity, WAF with OWASP rules, bot management, and rate limiting.</p>
+                </div>
+                <div class="border-l-4 border-cyber-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">GCP Cloud Armor</h4>
+                  <p class="text-gray-600 text-sm">Secondary WAF with custom security policies, geographic filtering, and reCAPTCHA Enterprise integration.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Application Layer -->
+            <div class="bg-white rounded-xl p-8 shadow-lg">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-server text-3xl text-slate-blue mr-4"></i>
+                <h3 class="text-2xl font-semibold text-navy">Application &amp; API Layer</h3>
+              </div>
+              <div class="space-y-4">
+                <div class="border-l-4 border-slate-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Global HTTPS Load Balancer</h4>
+                  <p class="text-gray-600 text-sm">Single anycast IP with SSL/TLS termination, health checks, and seamless Cloud Armor integration.</p>
+                </div>
+                <div class="border-l-4 border-cyber-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">API Gateway</h4>
+                  <p class="text-gray-600 text-sm">Managed Envoy-based proxy with OpenAPI support, authentication, and request transformation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Serverless Payment Gateway -->
+          <div class="bg-white rounded-xl p-8 shadow-lg mt-8">
+            <div class="flex items-center mb-6">
+              <i class="fas fa-credit-card text-3xl text-slate-blue mr-4"></i>
+              <h3 class="text-2xl font-semibold text-navy">Serverless Payment Gateway</h3>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div>
+                <h4 class="text-lg font-semibold text-navy mb-4">Core Components</h4>
+                <div class="space-y-3">
+                  <div class="flex items-center">
+                    <div class="w-3 h-3 bg-slate-blue rounded-full mr-3"></div>
+                    <span class="text-gray-700">Python Cloud Functions for business logic</span>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="w-3 h-3 bg-cyber-blue rounded-full mr-3"></div>
+                    <span class="text-gray-700">Cloud Tasks for asynchronous processing</span>
+                  </div>
+                  <div class="flex items-center">
+                    <div class="w-3 h-3 bg-navy rounded-full mr-3"></div>
+                    <span class="text-gray-700">Simulated payment authorization flow</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-navy mb-4">Key Features</h4>
+                <ul class="space-y-2 text-sm text-gray-600">
+                  <li>• Automatic scaling from zero to thousands of instances</li>
+                  <li>• Stateless and idempotent function design</li>
+                  <li>• Comprehensive input validation and logging</li>
+                  <li>• Integration with Terraform for deployment</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PCI DSS Compliance -->
+      <section id="compliance" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="mb-12">
+            <h2 class="text-4xl font-serif font-bold text-navy mb-6">PCI DSS Compliance Framework</h2>
+            <div class="w-24 h-1 bg-slate-blue mb-8"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="bg-gradient-to-br from-slate-blue/10 to-navy/10 rounded-xl p-8">
+              <h3 class="text-2xl font-semibold text-navy mb-6">Compliance Requirements</h3>
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <div class="bg-slate-blue text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1">1</div>
+                  <div>
+                    <h4 class="font-semibold text-navy mb-1">Firewall Configuration</h4>
+                    <p class="text-sm text-gray-600">Multi-layered firewall approach using Cloudflare and GCP Cloud Armor</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <div class="bg-slate-blue text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1">6</div>
+                  <div>
+                    <h4 class="font-semibold text-navy mb-1">Secure Development</h4>
+                    <p class="text-sm text-gray-600">Qualys vulnerability scanning and secure coding practices</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <div class="bg-slate-blue text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1">10</div>
+                  <div>
+                    <h4 class="font-semibold text-navy mb-1">Logging &amp; Monitoring</h4>
+                    <p class="text-sm text-gray-600">Comprehensive logging pipeline to Splunk SIEM</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-8">
+              <h3 class="text-2xl font-semibold text-navy mb-6">Security Controls</h3>
+              <div class="space-y-4">
+                <div class="border-l-4 border-cyber-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Data Encryption</h4>
+                  <p class="text-sm text-gray-600">Automatic encryption at rest and in transit using GCP&#39;s built-in security features</p>
+                </div>
+                <div class="border-l-4 border-navy pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Access Control</h4>
+                  <p class="text-sm text-gray-600">Principle of least privilege with IAM roles and API authentication</p>
+                </div>
+                <div class="border-l-4 border-silver pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Vulnerability Management</h4>
+                  <p class="text-sm text-gray-600">Regular scanning with Qualys and automated threat detection</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shared Responsibility Model -->
+          <div class="bg-navy rounded-xl p-8 text-white">
+            <h3 class="text-2xl font-semibold mb-6">Shared Responsibility Model</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div>
+                <h4 class="text-lg font-semibold text-cyber-blue mb-4">Google Cloud Responsibilities</h4>
+                <ul class="space-y-2 text-sm">
+                  <li>• Physical security of data centers</li>
+                  <li>• Network infrastructure security</li>
+                  <li>• Hypervisor and host OS security</li>
+                  <li>• Managed service availability</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-cyber-blue mb-4">Customer Responsibilities</h4>
+                <ul class="space-y-2 text-sm">
+                  <li>• Application security and configuration</li>
+                  <li>• Identity and access management</li>
+                  <li>• Data encryption and key management</li>
+                  <li>• Logging and monitoring setup</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Implementation Plan -->
+      <section id="implementation" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-8">
+          <div class="mb-12">
+            <h2 class="text-4xl font-serif font-bold text-navy mb-6">Implementation Plan</h2>
+            <div class="w-24 h-1 bg-slate-blue mb-8"></div>
+            <p class="text-lg text-gray-700 max-w-3xl">
+              A structured 8-10 hour implementation schedule with clear milestones and deliverables.
+            </p>
+          </div>
+
+          <!-- Timeline -->
+          <div class="space-y-8">
+            <!-- Phase 1 -->
+            <div class="bg-white rounded-xl p-8 shadow-lg">
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                  <div class="bg-slate-blue text-white rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold mr-4">1</div>
+                  <div>
+                    <h3 class="text-2xl font-semibold text-navy">Infrastructure Provisioning</h3>
+                    <p class="text-gray-600">Hours 1-3</p>
+                  </div>
+                </div>
+                <div class="bg-slate-blue/10 text-slate-blue px-4 py-2 rounded-full text-sm font-semibold">
+                  Foundation
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="border-l-4 border-slate-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Hour 1: Terraform Configuration</h4>
+                  <p class="text-sm text-gray-600 mb-2">Define and deploy core GCP infrastructure including VPC, Cloud Functions, Cloud Tasks, and Load Balancer.</p>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="px-2 py-1 bg-slate-blue/10 text-slate-blue rounded text-xs">Terraform</span>
+                    <span class="px-2 py-1 bg-slate-blue/10 text-slate-blue rounded text-xs">GCP</span>
+                  </div>
+                </div>
+                <div class="border-l-4 border-cyber-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Hour 2: Serverless Deployment</h4>
+                  <p class="text-sm text-gray-600 mb-2">Deploy Python Cloud Functions for payment gateway and worker functions.</p>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="px-2 py-1 bg-cyber-blue/10 text-cyber-blue rounded text-xs">Python</span>
+                    <span class="px-2 py-1 bg-cyber-blue/10 text-cyber-blue rounded text-xs">Cloud Functions</span>
+                  </div>
+                </div>
+                <div class="border-l-4 border-navy pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Hour 3: Security Policies</h4>
+                  <p class="text-sm text-gray-600 mb-2">Configure Cloudflare WAF and GCP Cloud Armor security policies.</p>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="px-2 py-1 bg-navy/10 text-navy rounded text-xs">Cloudflare</span>
+                    <span class="px-2 py-1 bg-navy/10 text-navy rounded text-xs">Cloud Armor</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="bg-white rounded-xl p-8 shadow-lg">
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                  <div class="bg-cyber-blue text-white rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold mr-4">2</div>
+                  <div>
+                    <h3 class="text-2xl font-semibold text-navy">Application Development</h3>
+                    <p class="text-gray-600">Hours 4-6</p>
+                  </div>
+                </div>
+                <div class="bg-cyber-blue/10 text-cyber-blue px-4 py-2 rounded-full text-sm font-semibold">
+                  Integration
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="border-l-4 border-slate-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Hour 4: Payment Processing</h4>
+                  <p class="text-sm text-gray-600 mb-2">Implement core Python logic for payment validation and task enqueueing.</p>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="px-2 py-1 bg-slate-blue/10 text-slate-blue rounded text-xs">Python</span>
+                    <span class="px-2 py-1 bg-slate-blue/10 text-slate-blue rounded text-xs">Cloud Tasks</span>
+                  </div>
+                </div>
+                <div class="border-l-4 border-cyber-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Hour 5: Authorization Simulation</h4>
+                  <p class="text-sm text-gray-600 mb-2">Develop worker function for simulated payment authorization flow.</p>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="px-2 py-1 bg-cyber-blue/10 text-cyber-blue rounded text-xs">Async Processing</span>
+                    <span class="px-2 py-1 bg-cyber-blue/10 text-cyber-blue rounded text-xs">Randomized Testing</span>
+                  </div>
+                </div>
+                <div class="border-l-4 border-navy pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Hour 6: AI Chatbot Integration</h4>
+                  <p class="text-sm text-gray-600 mb-2">Set up AI chatbot for automated security tasks and Splunk queries.</p>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="px-2 py-1 bg-navy/10 text-navy rounded text-xs">AI Automation</span>
+                    <span class="px-2 py-1 bg-navy/10 text-navy rounded text-xs">Splunk API</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="bg-white rounded-xl p-8 shadow-lg">
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                  <div class="bg-navy text-white rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold mr-4">3</div>
+                  <div>
+                    <h3 class="text-2xl font-semibold text-navy">Security &amp; Testing</h3>
+                    <p class="text-gray-600">Hours 7-9</p>
+                  </div>
+                </div>
+                <div class="bg-navy/10 text-navy px-4 py-2 rounded-full text-sm font-semibold">
+                  Validation
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="border-l-4 border-slate-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Hour 7: Splunk Integration</h4>
+                  <p class="text-sm text-gray-600 mb-2">Configure Splunk Add-on for GCP and PCI Compliance dashboards.</p>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="px-2 py-1 bg-slate-blue/10 text-slate-blue rounded text-xs">SIEM</span>
+                    <span class="px-2 py-1 bg-slate-blue/10 text-slate-blue rounded text-xs">PCI Compliance</span>
+                  </div>
+                </div>
+                <div class="border-l-4 border-cyber-blue pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Hour 8: DDoS Simulation Setup</h4>
+                  <p class="text-sm text-gray-600 mb-2">Configure BreakingPoint for Layer 7 HTTP flood attack simulation.</p>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="px-2 py-1 bg-cyber-blue/10 text-cyber-blue rounded text-xs">BreakingPoint</span>
+                    <span class="px-2 py-1 bg-cyber-blue/10 text-cyber-blue rounded text-xs">Traffic Simulation</span>
+                  </div>
+                </div>
+                <div class="border-l-4 border-navy pl-4">
+                  <h4 class="font-semibold text-navy mb-2">Hour 9: Security Testing</h4>
+                  <p class="text-sm text-gray-600 mb-2">Execute DDoS simulation, analyze results, and run Qualys vulnerability scan.</p>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="px-2 py-1 bg-navy/10 text-navy rounded text-xs">Penetration Testing</span>
+                    <span class="px-2 py-1 bg-navy/10 text-navy rounded text-xs">Qualys Scan</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="bg-white rounded-xl p-8 shadow-lg">
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                  <div class="bg-silver text-white rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold mr-4">4</div>
+                  <div>
+                    <h3 class="text-2xl font-semibold text-navy">Finalization</h3>
+                    <p class="text-gray-600">Hours 9-10</p>
+                  </div>
+                </div>
+                <div class="bg-silver/10 text-silver px-4 py-2 rounded-full text-sm font-semibold">
+                  Delivery
+                </div>
+              </div>
+
+              <div class="border-l-4 border-silver pl-4">
+                <h4 class="font-semibold text-navy mb-2">Hours 9-10: Interactive Report Creation</h4>
+                <p class="text-sm text-gray-600 mb-4">Compile all test results, screenshots, and analysis into comprehensive interactive report documenting architecture, implementation, and security validation.</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-1 bg-silver/10 text-silver rounded text-xs">Documentation</span>
+                  <span class="px-2 py-1 bg-silver/10 text-silver rounded text-xs">Results Analysis</span>
+                  <span class="px-2 py-1 bg-silver/10 text-silver rounded text-xs">Final Report</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tool Configuration -->
+      <section id="tooling" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="mb-12">
+            <h2 class="text-4xl font-serif font-bold text-navy mb-6">Tool Configuration &amp; Integration</h2>
+            <div class="w-24 h-1 bg-slate-blue mb-8"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Terraform Configuration -->
+            <div class="bg-gray-50 rounded-xl p-8">
+              <div class="flex items-center mb-6">
+                <i class="fab fa-google text-3xl text-slate-blue mr-4"></i>
+                <h3 class="text-2xl font-semibold text-navy">Terraform for GCP</h3>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-semibold text-navy mb-2">Core Resources</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• VPC network and subnets</li>
+                    <li>• Cloud Functions with service accounts</li>
+                    <li>• Cloud Tasks queue with rate limiting</li>
+                    <li>• Global HTTPS Load Balancer</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy mb-2">Security Configuration</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• Cloud Armor security policies</li>
+                    <li>• IAM roles with least privilege</li>
+                    <li>• API Gateway with authentication</li>
+                    <li>• Managed SSL certificates</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Python Implementation -->
+            <div class="bg-gray-50 rounded-xl p-8">
+              <div class="flex items-center mb-6">
+                <i class="fab fa-python text-3xl text-slate-blue mr-4"></i>
+                <h3 class="text-2xl font-semibold text-navy">Python Application</h3>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-semibold text-navy mb-2">Cloud Functions</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• HTTP-triggered with Flask Request</li>
+                    <li>• Input validation and error handling</li>
+                    <li>• Cloud Tasks client integration</li>
+                    <li>• Structured logging with Cloud Logging</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-navy mb-2">Worker Function</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• Idempotent task processing</li>
+                    <li>• Simulated payment authorization</li>
+                    <li>• Random success/failure outcomes</li>
+                    <li>• Comprehensive audit logging</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Splunk Integration -->
+          <div class="bg-navy rounded-xl p-8 text-white mt-8">
+            <div class="flex items-center mb-6">
+              <i class="fas fa-chart-line text-3xl text-cyber-blue mr-4"></i>
+              <h3 class="text-2xl font-semibold">Splunk SIEM &amp; Compliance</h3>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div>
+                <h4 class="text-lg font-semibold text-cyber-blue mb-4">Log Ingestion</h4>
+                <ul class="text-sm space-y-2">
+                  <li>• Splunk Add-on for Google Cloud Platform</li>
+                  <li>• Pub/Sub topic for log export</li>
+                  <li>• GCP service account with logging permissions</li>
+                  <li>• Real-time log streaming via Dataflow</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-cyber-blue mb-4">PCI Compliance</h4>
+                <ul class="text-sm space-y-2">
+                  <li>• Splunk App for PCI Compliance</li>
+                  <li>• Pre-built dashboards for all 12 requirements</li>
+                  <li>• Automated correlation searches</li>
+                  <li>• Compliance reporting and alerting</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Threat Analysis -->
+      <section id="analysis" class="py-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="mb-12">
+            <h2 class="text-4xl font-serif font-bold text-navy mb-6">Threat Analysis &amp; Intelligence</h2>
+            <div class="w-24 h-1 bg-slate-blue mb-8"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Palo Alto WildFire -->
+            <div class="bg-white rounded-xl p-8 shadow-lg">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-fire text-3xl text-red-500 mr-4"></i>
+                <h3 class="text-2xl font-semibold text-navy">Palo Alto WildFire</h3>
+              </div>
+
+              <p class="text-gray-600 mb-6">Cloud-based threat analysis service for detecting zero-day exploits and advanced malware.</p>
+
+              <div class="space-y-3">
+                <div class="flex items-center">
+                  <i class="fas fa-cog text-slate-blue mr-3"></i>
+                  <span class="text-sm">Dynamic sandbox analysis</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-search text-slate-blue mr-3"></i>
+                  <span class="text-sm">Static code examination</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-brain text-slate-blue mr-3"></i>
+                  <span class="text-sm">Machine learning detection</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-microchip text-slate-blue mr-3"></i>
+                  <span class="text-sm">Bare metal analysis</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cloudflare Analytics -->
+            <div class="bg-white rounded-xl p-8 shadow-lg">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-shield-alt text-3xl text-orange-500 mr-4"></i>
+                <h3 class="text-2xl font-semibold text-navy">Cloudflare Analytics</h3>
+              </div>
+
+              <p class="text-gray-600 mb-6">Comprehensive security analytics and attack visibility at the edge.</p>
+
+              <div class="space-y-3">
+                <div class="flex items-center">
+                  <i class="fas fa-chart-bar text-slate-blue mr-3"></i>
+                  <span class="text-sm">Attack analytics dashboard</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-robot text-slate-blue mr-3"></i>
+                  <span class="text-sm">Bot traffic insights</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-exclamation-triangle text-slate-blue mr-3"></i>
+                  <span class="text-sm">Security event logging</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-globe text-slate-blue mr-3"></i>
+                  <span class="text-sm">Geographic threat mapping</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Chatbot -->
+            <div class="bg-white rounded-xl p-8 shadow-lg">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-comments text-3xl text-purple-500 mr-4"></i>
+                <h3 class="text-2xl font-semibold text-navy">AI Chatbot</h3>
+              </div>
+
+              <p class="text-gray-600 mb-6">Automated security operations and intelligent query processing.</p>
+
+              <div class="space-y-3">
+                <div class="flex items-center">
+                  <i class="fas fa-search text-slate-blue mr-3"></i>
+                  <span class="text-sm">Splunk query automation</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-file-alt text-slate-blue mr-3"></i>
+                  <span class="text-sm">Report generation</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-info-circle text-slate-blue mr-3"></i>
+                  <span class="text-sm">Threat context provision</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-bell text-slate-blue mr-3"></i>
+                  <span class="text-sm">Alert response assistance</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Threat Intelligence Flow -->
+          <div class="bg-white rounded-xl p-8 shadow-lg mt-8">
+            <h3 class="text-2xl font-semibold text-navy mb-6">Threat Intelligence Integration</h3>
+            <div class="mermaid-title">Threat Intelligence Integration Flow</div>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid" id="threat-diagram">
+                flowchart LR
+                A[&#34;Suspicious Traffic&#34;] --&gt; B[&#34;Cloudflare Detection&#34;]
+                B --&gt; C[&#34;Log Export to GCP&#34;]
+                C --&gt; D[&#34;Palo Alto WildFire Analysis&#34;]
+                D --&gt; E[&#34;Threat Intelligence&#34;]
+                E --&gt; F[&#34;Automated Prevention Rules&#34;]
+                F --&gt; G[&#34;Cloud Armor Policies&#34;]
+                G --&gt; H[&#34;Attack Mitigation&#34;]
+
+                E --&gt; I[&#34;Splunk SIEM&#34;]
+                I --&gt; J[&#34;AI Chatbot Queries&#34;]
+                J --&gt; K[&#34;Security Team Response&#34;]
+
+                classDef primary fill:#4f46e5,stroke:#3730a3,stroke-width:2px,color:#fff
+                classDef secondary fill:#00d4ff,stroke:#0891b2,stroke-width:2px,color:#0a2540
+                classDef tertiary fill:#0a2540,stroke:#0d1117,stroke-width:2px,color:#fff
+                classDef accent fill:#c0c0c0,stroke:#9ca3af,stroke-width:2px,color:#0a2540
+
+                class A,B primary
+                class C,D,E,F secondary
+                class G,H,I,J,K tertiary
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results &amp; Validation -->
+      <section id="results" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="mb-12">
+            <h2 class="text-4xl font-serif font-bold text-navy mb-6">Results &amp; Validation</h2>
+            <div class="w-24 h-1 bg-slate-blue mb-8"></div>
+          </div>
+
+          <!-- Testing Results -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="bg-gray-50 rounded-xl p-8">
+              <h3 class="text-2xl font-semibold text-navy mb-6">DDoS Simulation Results</h3>
+              <div class="space-y-6">
+                <div>
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-navy">Attack Traffic Blocked</span>
+                    <span class="text-2xl font-bold text-green-600">99.9%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: 99.9%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-navy">Application Availability</span>
+                    <span class="text-2xl font-bold text-green-600">100%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-navy">Latency Impact</span>
+                    <span class="text-2xl font-bold text-yellow-600">+15ms</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 20%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-8">
+              <h3 class="text-2xl font-semibold text-navy mb-6">Compliance Validation</h3>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-navy">PCI DSS Requirement 1</span>
+                  <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-navy">PCI DSS Requirement 6</span>
+                  <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-navy">PCI DSS Requirement 10</span>
+                  <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-navy">Qualys Scan Results</span>
+                  <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Clean</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Achievements -->
+          <div class="bg-gradient-to-br from-slate-blue to-navy rounded-xl p-8 text-white">
+            <h3 class="text-2xl font-semibold mb-8">Project Achievements</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div class="text-center">
+                <div class="text-3xl font-bold text-cyber-blue mb-2">10</div>
+                <div class="text-sm">Hour Implementation</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold text-cyber-blue mb-2">6</div>
+                <div class="text-sm">Security Layers</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold text-cyber-blue mb-2">99.9%</div>
+                <div class="text-sm">DDoS Protection</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold text-cyber-blue mb-2">PCI</div>
+                <div class="text-sm">DSS Compliant</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Final Architecture Validation -->
+          <div class="bg-white rounded-xl p-8 shadow-lg mt-8">
+            <h3 class="text-2xl font-semibold text-navy mb-6">Architecture Validation</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div class="text-center">
+                <i class="fas fa-shield-alt text-4xl text-slate-blue mb-4"></i>
+                <h4 class="font-semibold text-navy mb-2">Security Validated</h4>
+                <p class="text-sm text-gray-600">Multi-layered defense successfully mitigated simulated attacks while maintaining application availability.</p>
+              </div>
+              <div class="text-center">
+                <i class="fas fa-cogs text-4xl text-cyber-blue mb-4"></i>
+                <h4 class="font-semibold text-navy mb-2">Automation Achieved</h4>
+                <p class="text-sm text-gray-600">Terraform deployment and AI chatbot integration demonstrated effective automation of security operations.</p>
+              </div>
+              <div class="text-center">
+                <i class="fas fa-chart-line text-4xl text-navy mb-4"></i>
+                <h4 class="font-semibold text-navy mb-2">Observability Confirmed</h4>
+                <p class="text-sm text-gray-600">Comprehensive logging pipeline provided complete visibility into security events and system performance.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bg-deep-navy text-white py-12">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <h3 class="text-xl font-semibold mb-4">Project Resources</h3>
+              <ul class="space-y-2 text-sm text-gray-300">
+                <li>
+                  <a href="#" class="hover:text-cyber-blue transition-colors">Terraform Configuration</a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-cyber-blue transition-colors">Python Source Code</a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-cyber-blue transition-colors">Compliance Documentation</a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold mb-4">References</h3>
+              <ul class="space-y-2 text-sm text-gray-300">
+                <li>
+                  <a href="https://cloud.google.com/architecture/pci-dss-compliance-in-gcp" class="hover:text-cyber-blue transition-colors" target="_blank">GCP PCI DSS Guide</a>
+                </li>
+                <li>
+                  <a href="https://cloud.google.com/chronicle/docs/ingestion/default-parsers/cloudflare-waf" class="hover:text-cyber-blue transition-colors" target="_blank">Cloudflare WAF Integration</a>
+                </li>
+                <li>
+                  <a href="https://www.westconcomstor.com/content/dam/wcgcom/Global/CorpSite/pdfs/Palo-Alto-Networks-WildFire-at-a-glance-EN.pdf" class="hover:text-cyber-blue transition-colors" target="_blank">Palo Alto WildFire</a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold mb-4">Technology Stack</h3>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-slate-blue/20 rounded-full text-xs">GCP</span>
+                <span class="px-3 py-1 bg-slate-blue/20 rounded-full text-xs">Cloudflare</span>
+                <span class="px-3 py-1 bg-slate-blue/20 rounded-full text-xs">Palo Alto</span>
+                <span class="px-3 py-1 bg-slate-blue/20 rounded-full text-xs">Splunk</span>
+                <span class="px-3 py-1 bg-slate-blue/20 rounded-full text-xs">Python</span>
+                <span class="px-3 py-1 bg-slate-blue/20 rounded-full text-xs">Terraform</span>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
+            <p>Cloud Security Project Blueprint • Implementation Guide • 2025</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+        // Initialize Mermaid with custom theme
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#ffffff',
+                primaryTextColor: '#0a2540',
+                primaryBorderColor: '#4f46e5',
+                lineColor: '#4f46e5',
+                secondaryColor: '#00d4ff',
+                tertiaryColor: '#0a2540',
+                background: 'transparent',
+                mainBkg: '#ffffff',
+                secondBkg: '#00d4ff',
+                tertiaryBkg: '#0a2540'
+            },
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true,
+                curve: 'basis'
+            },
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '13px'
+        });
+
+        // Initialize Mermaid Controls for zoom and pan
+        function initializeMermaidControls() {
+            const containers = document.querySelectorAll('.mermaid-container');
+
+            containers.forEach(container => {
+            const mermaidElement = container.querySelector('.mermaid');
+            let scale = 1;
+            let isDragging = false;
+            let startX, startY, translateX = 0, translateY = 0;
+
+            // 触摸相关状态
+            let isTouch = false;
+            let touchStartTime = 0;
+            let initialDistance = 0;
+            let initialScale = 1;
+            let isPinching = false;
+
+            // Zoom controls
+            const zoomInBtn = container.querySelector('.zoom-in');
+            const zoomOutBtn = container.querySelector('.zoom-out');
+            const resetBtn = container.querySelector('.reset-zoom');
+            const fullscreenBtn = container.querySelector('.fullscreen');
+
+            function updateTransform() {
+                mermaidElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+                if (scale > 1) {
+                container.classList.add('zoomed');
+                } else {
+                container.classList.remove('zoomed');
+                }
+
+                mermaidElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+            }
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                scale = Math.min(scale * 1.25, 4);
+                updateTransform();
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                scale = Math.max(scale / 1.25, 0.3);
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+                updateTransform();
+                });
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+                });
+            }
+
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', () => {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                });
+            }
+
+            // Mouse Events
+            mermaidElement.addEventListener('mousedown', (e) => {
+                if (isTouch) return; // 如果是触摸设备，忽略鼠标事件
+
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                mermaidElement.style.cursor = 'grabbing';
+                updateTransform();
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && !isTouch) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            // 获取两点之间的距离
+            function getTouchDistance(touch1, touch2) {
+                return Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+                );
+            }
+
+            // Touch Events - 触摸事件处理
+            mermaidElement.addEventListener('touchstart', (e) => {
+                isTouch = true;
+                touchStartTime = Date.now();
+
+                if (e.touches.length === 1) {
+                // 单指拖动
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+
+                } else if (e.touches.length === 2) {
+                // 双指缩放
+                isPinching = true;
+                isDragging = false;
+
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                initialDistance = getTouchDistance(touch1, touch2);
+                initialScale = scale;
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && isDragging && !isPinching) {
+                // 单指拖动
+                const touch = e.touches[0];
+                translateX = touch.clientX - startX;
+                translateY = touch.clientY - startY;
+                updateTransform();
+
+                } else if (e.touches.length === 2 && isPinching) {
+                // 双指缩放
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = getTouchDistance(touch1, touch2);
+
+                if (initialDistance > 0) {
+                    const newScale = Math.min(Math.max(
+                    initialScale * (currentDistance / initialDistance),
+                    0.3
+                    ), 4);
+                    scale = newScale;
+                    updateTransform();
+                }
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchend', (e) => {
+                // 重置状态
+                if (e.touches.length === 0) {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                // 延迟重置isTouch，避免鼠标事件立即触发
+                setTimeout(() => {
+                    isTouch = false;
+                }, 100);
+                } else if (e.touches.length === 1 && isPinching) {
+                // 从双指变为单指，切换为拖动模式
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+                }
+
+                updateTransform();
+            });
+
+            mermaidElement.addEventListener('touchcancel', (e) => {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                setTimeout(() => {
+                isTouch = false;
+                }, 100);
+
+                updateTransform();
+            });
+
+            // Enhanced wheel zoom with better center point handling
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.min(Math.max(scale * delta, 0.3), 4);
+
+                // Adjust translation to zoom towards center
+                if (newScale !== scale) {
+                const scaleDiff = newScale / scale;
+                translateX = translateX * scaleDiff;
+                translateY = translateY * scaleDiff;
+                scale = newScale;
+
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+
+                updateTransform();
+                }
+            });
+
+            // Initialize display
+            updateTransform();
+            });
+        }
+
+        // TOC functionality
+        const toc = document.getElementById('toc');
+        const tocToggle = document.getElementById('toc-toggle');
+        const tocClose = document.getElementById('toc-close');
+        
+        // Function to open the TOC
+        function openTOC() {
+            toc.classList.remove('-translate-x-full');
+            toc.classList.add('translate-x-0');
+        }
+        
+        // Function to close the TOC
+        function closeTOC() {
+            toc.classList.remove('translate-x-0');
+            toc.classList.add('-translate-x-full');
+        }
+        
+        // Toggle TOC on hamburger button click
+        tocToggle.addEventListener('click', openTOC);
+        
+        // Close TOC on close button click
+        tocClose.addEventListener('click', closeTOC);
+        
+        // Close TOC when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth >= 768) return; // Only for mobile
+            
+            const isTocClick = toc.contains(e.target);
+            const isToggleClick = tocToggle.contains(e.target);
+            
+            if (!isTocClick && !isToggleClick && toc.classList.contains('translate-x-0')) {
+                closeTOC();
+            }
+        });
+        
+        // Close TOC when window is resized to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                closeTOC();
+            }
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                // Close TOC after clicking a link on mobile
+                if (window.innerWidth < 768) {
+                    closeTOC();
+                }
+            });
+        });
+
+        // Highlight active section in TOC
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -70% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    const activeLink = document.querySelector(`nav a[href="#${id}"]`);
+                    if (activeLink) {
+                        document.querySelectorAll('nav a').forEach(link => {
+                            link.classList.remove('text-slate-blue', 'font-semibold');
+                            link.classList.add('text-gray-700');
+                        });
+                        activeLink.classList.remove('text-gray-700');
+                        activeLink.classList.add('text-slate-blue', 'font-semibold');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section[id]').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Initialize mermaid controls
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMermaidControls();
+        });
+    </script>
+  
+
+</body></html>
