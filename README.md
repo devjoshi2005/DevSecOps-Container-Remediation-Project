@@ -17,7 +17,7 @@ flowchart LR
     I --> J[S3 Snapshot Storage]:::pre
 
     %% Remediation (red)
-    J --> K[Claude Model (AWS Bedrock)]:::rem
+    J --> K[Claude Model - AWS Bedrock]:::rem
     H --> K
     K --> L[Rectified Code Snippets]:::rem
     L --> M[GitHub PR to New Branch from Main]:::rem
