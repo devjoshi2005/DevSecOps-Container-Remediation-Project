@@ -1,6 +1,6 @@
 # DevSecOps-Container-Remediation-Project
 
-```
+```mermaid
 flowchart LR
     %% Pre-remediation (light gray/blackish)
     A[Flask App Prepared]:::pre --> B[SonarQube Static Code Analysis]:::pre
@@ -30,5 +30,3 @@ flowchart LR
     classDef pre fill:#d9d9d9,stroke:#333,stroke-width:1px,color:#000;
     classDef rem fill:#f8d7da,stroke:#c00,stroke-width:1px,color:#000;
     classDef post fill:#d4edda,stroke:#155724,stroke-width:1px,color:#000;
-
-```
