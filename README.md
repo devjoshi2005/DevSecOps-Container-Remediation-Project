@@ -5,7 +5,7 @@ flowchart LR
     %% Pre-remediation (light gray/blackish)
     A[Flask App Prepared]:::pre --> B[SonarQube Static Code Analysis]:::pre
     B --> C[OWASP ZAP Pen Testing]:::pre
-    C --> D[Build Docker Image]:::pre
+    B --> D[Build Docker Image]:::pre
     D --> E[ECR Repository]:::pre
     E --> F[ECS Deployment]:::post
 
