@@ -9,12 +9,12 @@ flowchart LR
     style Pre-Remediation fill:#ececec,stroke:#333,stroke-width:1px
     A[Developer: Flask + HTML/CSS code]:::pre --> B[GitHub Actions CI]:::pre
     B --> C[OWASP ZAP runtime pen test]:::pre
-    B --> D[SonarQube static analysis (EC2)]:::pre
-    D --> H[Graylog (EC2) logs]:::pre
+    B --> D[SonarQube static analysis - ec2]:::pre
+    D --> H[Graylog - ec2 ]:::pre
     C --> H
-    B --> E[Docker build (multi-stage)]:::pre
+    B --> E[Docker build multi-stage]:::pre
     E --> F[Push image to ECR]:::pre
-    F --> G[ECS deploy (canary/blue-green)]:::post
+    F --> G[ECS deploy canary/blue-green]:::post
     F --> T[Trivy image scan]:::pre
     T --> H
   end
@@ -22,7 +22,7 @@ flowchart LR
   subgraph Remediation
     style Remediation fill:#fde7e7,stroke:#c00,stroke-width:1px
     F --> X[Extract code from image layers]:::rem
-    X --> S3[S3 snapshot (tar.gz)]:::rem
+    X --> S3[S3 snapshot tar.gz]:::rem
     H --> Bed[Bedrock: Claude Sonnet model]:::rem
     S3 --> Bed
     Bed --> PR[Create remediation branch + PR]:::rem
