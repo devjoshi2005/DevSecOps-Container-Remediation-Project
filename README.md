@@ -2,7 +2,10 @@
 
 This project shows how we can build software securely from the very beginning. Instead of waiting until the end to check for problems, we scan, test, and fix code at every step. That way, security issues are caught early and fixed automatically, reducing the burden on operations teams later.
 
-For a detailed technical breakdown of tools and metrics, see: technicalreport.md
+**NOTE:YOU CANNOT RUN THIS GITHUB ACTIONS WORKFLOW FILE SINCE THAT WOULD REQUIRE YOU TO CONFIGURE YOUR OWN GITHUB SECRETS**
+
+For a detailed technical breakdown of tools and metrics, see: **[technicalreport.md](https://github.com/devjoshi2005/DevSecOps-Container-Remediation-Project/blob/main/technicalreport.md)**
+
 
 ```mermaid
 flowchart LR
