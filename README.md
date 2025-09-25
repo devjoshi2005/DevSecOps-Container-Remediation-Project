@@ -1,6 +1,6 @@
 # DevSecOps-Container-Remediation-Project
 
-This project shows how we can build software securely from the very beginning. Instead of waiting until the end to check for problems, we scan, test, and fix code at every step. That way, security issues are caught early and fixed automatically, reducing the burden on operations teams later.
+This project shows how we can build software (based on microservice architecture like using the help of docker tool) securely from the very beginning. Instead of waiting until the end to check for problems, we scan, test, and fix code at every step. That way, security issues are caught early and fixed automatically, reducing the burden on operations teams later.
 
 **NOTE:YOU CANNOT RUN THIS GITHUB ACTIONS WORKFLOW FILE SINCE THAT WOULD REQUIRE YOU TO CONFIGURE YOUR OWN GITHUB SECRETS**
 
@@ -41,16 +41,16 @@ flowchart LR
 ```
 
 
-Think of this project like building a house with smart security built in:
+**Think of this project like building a house with smart security built in:**
 
-Before moving in (Pre‑remediation): We check the blueprints (code scans), test the doors and windows (penetration testing), and make sure the building materials are safe (container scans).
+*Before moving in (Pre‑remediation):* We check the blueprints (code scans), test the doors and windows (penetration testing), and make sure the building materials are safe (container scans).
 
-During construction (Remediation): If problems are found, an AI “expert builder” (Claude via AWS Bedrock) suggests fixes and even prepares the corrected parts for us. These fixes are proposed as pull requests in GitHub, so humans can review before merging.
+*During construction (Remediation):* If problems are found, an AI “expert builder” (Claude via AWS Bedrock) suggests fixes and even prepares the corrected parts for us. These fixes are proposed as pull requests in GitHub, so humans can review before merging.
 
-After moving in (Post‑remediation): Continuous inspections (AWS Inspector) keep checking the house for cracks or weaknesses over time, so we don’t get caught off guard later.
+*After moving in (Post‑remediation):* Continuous inspections (AWS Inspector) keep checking the house for cracks or weaknesses over time, so we don’t get caught off guard later.
 
 
-Step‑by‑Step (Layman’s View): 
+**Step‑by‑Step (Layman’s View):**
 
 Build a sample app: A simple Flask web app is created and packaged into a container (like boxing up the app so it can run anywhere).
 
@@ -74,13 +74,13 @@ Propose changes: Claude creates a new branch in GitHub and opens a pull request 
 
 Ongoing monitoring: AWS Inspector continuously scans the containers in ECR to catch new vulnerabilities that might appear in the future.
 
-Why This Matters: 
+**Why This Matters:** 
 
-For developers: Problems are caught early, saving time and frustration.
+*For developers:* Problems are caught early, saving time and frustration.
 
-For security teams: Automated scanning and AI remediation reduce manual workload.
+*For security teams:* Automated scanning and AI remediation reduce manual workload.
 
-For businesses: Faster fixes mean less downtime, lower risk, and better compliance with security standards.
+*For businesses:* Faster fixes mean less downtime, lower risk, and better compliance with security standards.
 
 
 
