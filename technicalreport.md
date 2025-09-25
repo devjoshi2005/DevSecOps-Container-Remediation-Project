@@ -4,13 +4,14 @@
 
 
 ``` mermaid
+
 flowchart LR
   subgraph Pre-Remediation
-    style Pre-Remediation fill:#ececec,stroke:#333,stroke-width:1px
+    style Pre-Remediation fill:#1c1c1c,stroke:#ffffff,stroke-width:1px
     A[Developer: Flask + HTML/CSS code]:::pre --> B[GitHub Actions CI]:::pre
     B --> C[OWASP ZAP runtime pen test]:::pre
     B --> D[SonarQube static analysis - ec2]:::pre
-    D --> H[Graylog - ec2 ]:::pre
+    D --> H[Graylog - ec2]:::pre
     C --> H
     B --> E[Docker build multi-stage]:::pre
     E --> F[Push image to ECR]:::pre
@@ -20,7 +21,7 @@ flowchart LR
   end
 
   subgraph Remediation
-    style Remediation fill:#fde7e7,stroke:#c00,stroke-width:1px
+    style Remediation fill:#2a0000,stroke:#ffcccc,stroke-width:1px
     F --> X[Extract code from image layers]:::rem
     X --> S3[S3 snapshot tar.gz]:::rem
     H --> Bed[Bedrock: Claude Sonnet model]:::rem
@@ -30,15 +31,15 @@ flowchart LR
   end
 
   subgraph Post-Remediation
-    style Post-Remediation fill:#e8f7e9,stroke:#155724,stroke-width:1px
+    style Post-Remediation fill:#003300,stroke:#ccffcc,stroke-width:1px
     G --> Inspector[AWS Inspector continuous scans]:::post
     Inspector --> H
     G --> H
   end
 
-  classDef pre fill:#d9d9d9,stroke:#333,color:#000;
-  classDef rem fill:#f8d7da,stroke:#c00,color:#000;
-  classDef post fill:#d4edda,stroke:#155724,color:#000;
+  classDef pre fill:#1c1c1c,stroke:#ffffff,color:#ffffff;
+  classDef rem fill:#2a0000,stroke:#ffcccc,color:#ffffff;
+  classDef post fill:#003300,stroke:#ccffcc,color:#ffffff;
 
 
 
