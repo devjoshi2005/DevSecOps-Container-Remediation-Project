@@ -10,9 +10,9 @@ For a detailed technical breakdown of tools and metrics, see: **[technicalreport
 ```mermaid
 flowchart LR
     %% Pre-remediation (light gray/blackish)
-    A[Flask App Prepared]:::pre --> B[SonarQube Static Code Analysis]:::pre
-    B --> C[OWASP ZAP Pen Testing]:::pre
-    B --> D[Build Docker Image]:::pre
+    A[Flask App Prepared in github repository]:::pre --> B[SonarQube Static Code Analysis]:::pre
+    A --> C[OWASP ZAP Pen Testing]:::pre
+    A --> D[Build Docker Image]:::pre
     D --> E[ECR Repository]:::pre
     E --> F[ECS Deployment]:::post
 
@@ -20,15 +20,16 @@ flowchart LR
     E --> G[Trivy Repository Scan]:::pre
     G --> H[Graylog - Security Logs]:::pre
     B --> H
-    G --> I[Codebase Extracted from ECR]:::pre
+    E --> I[Codebase Extracted from ECR]:::pre
     I --> J[S3 Snapshot Storage]:::pre
 
     %% Remediation (red)
     J --> K[Claude Model - AWS Bedrock]:::rem
-    H --> K
+    B --> K
+    G --> K
     K --> L[Rectified Code Snippets]:::rem
     L --> M[GitHub PR to New Branch from Main]:::rem
-
+    M --> A
     %% Post-remediation (green)
     E --> N[AWS Inspector Continuous Scan]:::post
     F --> N
