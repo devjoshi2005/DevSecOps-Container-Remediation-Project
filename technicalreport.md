@@ -7,10 +7,10 @@
 ```mermaid
 flowchart LR
     A[Step1 : Flask App Prepared in github repository] --> B[Step2: Owasp Zap Scanning is done on the application]
-    B --> C[Sonarqube static code analysis (hosted in ec2) is done]
+    B --> C[Sonarqube static code analysis is done]
     C --> D[built into docker image and later pushed to ECR and later ECS]
-    D --> E[Trivy scans the image pulled from the ECR for misconfigurations,secrets or CVE'S (pre container security scan)]
-    E --> F[sonarqube and trivy log values are sent to graylog (hosted in ec2) for log management and analysis ]
+    D --> E[Trivy scans the image pulled from the ECR for misconfigurations,secrets or CVE'S ]
+    E --> F[sonarqube and trivy log values are sent to graylog  for log management and analysis ]
     F --> G[codebase is extracted by pulling image in ECR and saved in s3 bucket]
     G --> H[codebase along with sonarqube and trivy log messages ONLY are sent to claude sonnet model accessed using aws bedrock]
     H --> I[Claude sonnet recitifies the code snippets from given data and provides remediated code snippets]
