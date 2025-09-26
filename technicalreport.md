@@ -2,48 +2,21 @@
 
 ![Image](https://github.com/user-attachments/assets/1c710d42-89fe-4a69-9c3d-f6c39e547746)
 
-
-``` mermaid
-
+*Step by Step Execution of this project*
+```mermaid
 flowchart LR
-  subgraph Pre-Remediation
-    style Pre-Remediation fill:#1c1c1c,stroke:#ffffff,stroke-width:1px
-    A[Developer: Flask + HTML/CSS code]:::pre --> B[GitHub Actions CI]:::pre
-    B --> C[OWASP ZAP runtime pen test]:::pre
-    B --> D[SonarQube static analysis - ec2]:::pre
-    D --> H[Graylog - ec2]:::pre
-    C --> H
-    B --> E[Docker build multi-stage]:::pre
-    E --> F[Push image to ECR]:::pre
-    F --> G[ECS deploy canary/blue-green]:::post
-    F --> T[Trivy image scan]:::pre
-    T --> H
-  end
-
-  subgraph Remediation
-    style Remediation fill:#2a0000,stroke:#ffcccc,stroke-width:1px
-    F --> X[Extract code from image layers]:::rem
-    X --> S3[S3 snapshot tar.gz]:::rem
-    H --> Bed[Bedrock: Claude Sonnet model]:::rem
-    S3 --> Bed
-    Bed --> PR[Create remediation branch + PR]:::rem
-    PR --> B
-  end
-
-  subgraph Post-Remediation
-    style Post-Remediation fill:#003300,stroke:#ccffcc,stroke-width:1px
-    G --> Inspector[AWS Inspector continuous scans]:::post
-    Inspector --> H
-    G --> H
-  end
-
-  classDef pre fill:#1c1c1c,stroke:#ffffff,color:#ffffff;
-  classDef rem fill:#2a0000,stroke:#ffcccc,color:#ffffff;
-  classDef post fill:#003300,stroke:#ccffcc,color:#ffffff;
-
-
-
+    A[Step1 : Flask App Prepared in github repository] --> B[Step2: Owasp Zap Scanning is done on the application]
+    B --> C[Sonarqube static code analysis (hosted in ec2) is done]
+    C --> D[built into docker image and later pushed to ECR and later ECS]
+    D --> E[Trivy scans the image pulled from the ECR for misconfigurations,secrets or CVE'S (pre container security scan)]
+    E --> F[sonarqube and trivy log values are sent to graylog (hosted in ec2) for log management and analysis ]
+    F --> G[codebase is extracted by pulling image in ECR and saved in s3 bucket]
+    G --> H[codebase along with sonarqube and trivy log messages ONLY are sent to claude sonnet model accessed using aws bedrock]
+    H --> I[Claude sonnet recitifies the code snippets from given data and provides remediated code snippets]
+    I --> J[A new commit branch is created from main branch which we send the remediated code snippets from claude as PR]
+    J --> A
 ```
+
 
 
 
