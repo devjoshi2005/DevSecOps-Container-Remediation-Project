@@ -21,17 +21,17 @@ flowchart LR
     I --> J[Step10 : A new commit branch is created from main branch which we send the remediated code snippets from Claude as PR]:::pr
     J --> A
 
-    %% --- Color Definitions ---
-    classDef code fill:#1f77b4,stroke:#ffffff,color:#ffffff;      %% Blue for source code
-    classDef zap fill:#ff7f0e,stroke:#ffffff,color:#ffffff;       %% Orange for ZAP
-    classDef sonar fill:#9467bd,stroke:#ffffff,color:#ffffff;     %% Purple for SonarQube
-    classDef docker fill:#17becf,stroke:#ffffff,color:#ffffff;    %% Teal for Docker/ECR/ECS
-    classDef trivy fill:#d62728,stroke:#ffffff,color:#ffffff;     %% Red for Trivy
-    classDef graylog fill:#2ca02c,stroke:#ffffff,color:#ffffff;   %% Green for Graylog
-    classDef s3 fill:#bcbd22,stroke:#ffffff,color:#000000;        %% Yellow for S3
-    classDef bedrock fill:#8c564b,stroke:#ffffff,color:#ffffff;   %% Brown for Bedrock
-    classDef ai fill:#e377c2,stroke:#ffffff,color:#ffffff;        %% Pink for AI remediation
-    classDef pr fill:#7f7f7f,stroke:#ffffff,color:#ffffff;        %% Gray for PR creation
+    %% --- Darker fills with white text for readability ---
+    classDef code fill:#0d47a1,stroke:#ffffff,color:#ffffff;      %% Dark blue
+    classDef zap fill:#e65100,stroke:#ffffff,color:#ffffff;       %% Dark orange
+    classDef sonar fill:#4a148c,stroke:#ffffff,color:#ffffff;     %% Deep purple
+    classDef docker fill:#006064,stroke:#ffffff,color:#ffffff;    %% Teal
+    classDef trivy fill:#b71c1c,stroke:#ffffff,color:#ffffff;     %% Dark red
+    classDef graylog fill:#1b5e20,stroke:#ffffff,color:#ffffff;   %% Dark green
+    classDef s3 fill:#827717,stroke:#ffffff,color:#ffffff;        %% Olive
+    classDef bedrock fill:#3e2723,stroke:#ffffff,color:#ffffff;   %% Dark brown
+    classDef ai fill:#880e4f,stroke:#ffffff,color:#ffffff;        %% Dark pink
+    classDef pr fill:#212121,stroke:#ffffff,color:#ffffff;        %% Dark gray
 
 ```
 
