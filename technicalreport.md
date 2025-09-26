@@ -10,16 +10,29 @@ DevSecOps‑Container‑Remediation‑Project is an end‑to‑end pipeline that
 
 ```mermaid
 flowchart LR
-    A[Step1 : Flask App Prepared in github repository] --> B[Step2: Owasp Zap Scanning is done on the application]
-    B --> C[Sonarqube static code analysis is done]
-    C --> D[built into docker image and later pushed to ECR and later ECS]
-    D --> E[Trivy scans the image pulled from the ECR for misconfigurations,secrets or CVE'S ]
-    E --> F[sonarqube and trivy log values are sent to graylog  for log management and analysis ]
-    F --> G[codebase is extracted by pulling image in ECR and saved in s3 bucket]
-    G --> H[codebase along with sonarqube and trivy log messages ONLY are sent to claude sonnet model accessed using aws bedrock]
-    H --> I[Claude sonnet recitifies the code snippets from given data and provides remediated code snippets]
-    I --> J[A new commit branch is created from main branch which we send the remediated code snippets from claude as PR]
+    A[Step1 : Flask App Prepared in github repository]:::code --> B[Step2 : Owasp Zap Scanning is done on the application]:::zap
+    B --> C[Step3 : Sonarqube static code analysis is done]:::sonar
+    C --> D[Step4 : Built into docker image and later pushed to ECR and later ECS]:::docker
+    D --> E[Step5 : Trivy scans the image pulled from the ECR for misconfigurations,secrets or CVE'S ]:::trivy
+    E --> F[Step6 : Sonarqube and Trivy log values are sent to Graylog for log management and analysis ]:::graylog
+    F --> G[Step7 : Codebase is extracted by pulling image in ECR and saved in S3 bucket]:::s3
+    G --> H[Step8 : Codebase along with Sonarqube and Trivy log messages ONLY are sent to Claude Sonnet model accessed using AWS Bedrock]:::bedrock
+    H --> I[Step9 : Claude Sonnet rectifies the code snippets from given data and provides remediated code snippets]:::ai
+    I --> J[Step10 : A new commit branch is created from main branch which we send the remediated code snippets from Claude as PR]:::pr
     J --> A
+
+    %% --- Color Definitions ---
+    classDef code fill:#1f77b4,stroke:#ffffff,color:#ffffff;      %% Blue for source code
+    classDef zap fill:#ff7f0e,stroke:#ffffff,color:#ffffff;       %% Orange for ZAP
+    classDef sonar fill:#9467bd,stroke:#ffffff,color:#ffffff;     %% Purple for SonarQube
+    classDef docker fill:#17becf,stroke:#ffffff,color:#ffffff;    %% Teal for Docker/ECR/ECS
+    classDef trivy fill:#d62728,stroke:#ffffff,color:#ffffff;     %% Red for Trivy
+    classDef graylog fill:#2ca02c,stroke:#ffffff,color:#ffffff;   %% Green for Graylog
+    classDef s3 fill:#bcbd22,stroke:#ffffff,color:#000000;        %% Yellow for S3
+    classDef bedrock fill:#8c564b,stroke:#ffffff,color:#ffffff;   %% Brown for Bedrock
+    classDef ai fill:#e377c2,stroke:#ffffff,color:#ffffff;        %% Pink for AI remediation
+    classDef pr fill:#7f7f7f,stroke:#ffffff,color:#ffffff;        %% Gray for PR creation
+
 ```
 
 High Level Summary 
