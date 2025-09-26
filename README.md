@@ -32,7 +32,6 @@ flowchart LR
     M --> A
     %% Post-remediation (green)
     E --> N[AWS Inspector Continuous Scan]:::post
-    F --> N
 
     %% Styles
     classDef pre fill:#d9d9d9,stroke:#333,stroke-width:1px,color:#000;
