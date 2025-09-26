@@ -3,6 +3,7 @@
 ![Image](https://github.com/user-attachments/assets/1c710d42-89fe-4a69-9c3d-f6c39e547746)
 
 *Step by Step Execution of this project*
+
 ```mermaid
 flowchart LR
     A[Step1 : Flask App Prepared in github repository] --> B[Step2: Owasp Zap Scanning is done on the application]
